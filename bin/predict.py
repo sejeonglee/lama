@@ -13,6 +13,7 @@ import traceback
 
 from saicinpainting.evaluation.utils import move_to_device
 from saicinpainting.evaluation.refinement import refine_predict
+from saicinpainting.evaluation.extpadding import extpadding_predict
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
@@ -77,6 +78,8 @@ def main(predict_config: OmegaConf):
                 # is same size as the input image
                 cur_res = refine_predict(batch, model, **predict_config.refiner)
                 cur_res = cur_res[0].permute(1,2,0).detach().cpu().numpy()
+            elif predict_config.get('extpadding', False):
+                cur_res = extpadding_predict(batch, model, device, predict_config)
             else:
                 with torch.no_grad():
                     batch = move_to_device(batch, device)

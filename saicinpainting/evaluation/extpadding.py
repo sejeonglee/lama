@@ -180,9 +180,9 @@ def _crop_image(img_arr: npt.NDArray[np.float32], expanded_ratio: float) -> npt.
     - img_arr(np.array): cropped image array
     """
     original_img = _convert_arr_to_pil_img(img_arr, "RGB")
-    width, height: Tuple[int, int] = original_img.size
+    width, height = original_img.size
 
-    crop_width, crop_height: Tuple[int, int] = map(
+    crop_width, crop_height = map(
         lambda x: round(
             (x / expanded_ratio)
             if expanded_ratio > 1
@@ -191,7 +191,7 @@ def _crop_image(img_arr: npt.NDArray[np.float32], expanded_ratio: float) -> npt.
         (width, height),
     )
 
-    box_left, box_top: Tuple[int, int] = map(
+    box_left, box_top = map(
         lambda t: round(abs(t[0] - t[1]) / 2),
         zip((width, height), (crop_width, crop_height)),
     )
